@@ -19,7 +19,9 @@ interface UserDao {
     @Update
     suspend fun edit(user: UserDbModel)
 
-    @Delete
-    suspend fun delete(user: UserDbModel)
+    @Query("DELETE FROM users WHERE id = :id")
+    suspend fun delete(id: Int)
 
+    @Query("DELETE FROM users")
+    suspend fun deleteAll()
 }

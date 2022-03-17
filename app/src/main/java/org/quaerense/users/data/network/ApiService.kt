@@ -8,7 +8,7 @@ interface ApiService {
 
     @GET("users")
     suspend fun getUserList(
-        @Query(PARAM_PAGE) page: Int = 1
+        @Query(PARAM_PAGE) page: Int = 0
     ): UserContainerDto
 
 

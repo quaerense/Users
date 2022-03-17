@@ -7,21 +7,21 @@ import com.google.gson.annotations.SerializedName
 data class UserDto(
     @SerializedName("id")
     @Expose
-    var id: Int?,
+    val id: Int,
 
     @SerializedName("email")
     @Expose
-    var email: String?,
+    val email: String?,
 
     @SerializedName("first_name")
     @Expose
-    var firstName: String?,
+    val firstName: String?,
 
     @SerializedName("last_name")
     @Expose
-    var lastName: String?,
+    val lastName: String?,
 
     @SerializedName("avatar")
     @Expose
-    var avatar: String?
+    val avatarUrl: String?
 )
