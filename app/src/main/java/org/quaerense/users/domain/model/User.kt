@@ -1,4 +1,4 @@
-package org.quaerense.users.domain
+package org.quaerense.users.domain.model
 
 data class User(
     val id: Int,

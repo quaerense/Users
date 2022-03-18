@@ -6,7 +6,6 @@ import org.quaerense.users.data.database.model.UserDbModel
 
 @Dao
 interface UserDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addAll(users: List<UserDbModel>)
 
@@ -21,7 +20,4 @@ interface UserDao {
 
     @Query("DELETE FROM users WHERE id = :id")
     suspend fun delete(id: Int)
-
-    @Query("DELETE FROM users")
-    suspend fun deleteAll()
 }
