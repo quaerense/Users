@@ -8,11 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import org.quaerense.users.databinding.FragmentMainBinding
 import org.quaerense.users.presentation.adapter.UserListAdapter
 import org.quaerense.users.presentation.viewmodel.MainViewModel
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private var _binding: FragmentMainBinding? = null
     private val binding: FragmentMainBinding
@@ -36,6 +37,7 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         adapter = UserListAdapter()
         binding.rvUserList.adapter = adapter
+        binding.srlRefreshUserList.setOnRefreshListener(this)
         setupSwipeListener()
         viewModel.getUserListUseCase().observe(viewLifecycleOwner) {
             adapter.submitList(it)
@@ -68,5 +70,11 @@ class MainFragment : Fragment() {
 
         val itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper.attachToRecyclerView(binding.rvUserList)
+    }
+
+    override fun onRefresh() {
+        binding.srlRefreshUserList.isRefreshing = true
+        viewModel.loadData()
+        binding.srlRefreshUserList.isRefreshing = false
     }
 }

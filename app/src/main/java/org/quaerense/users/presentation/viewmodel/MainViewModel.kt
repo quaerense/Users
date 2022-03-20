@@ -27,7 +27,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    init {
+    fun loadData() {
         loadDataUseCase()
+    }
+
+    init {
+        loadData()
     }
 }
