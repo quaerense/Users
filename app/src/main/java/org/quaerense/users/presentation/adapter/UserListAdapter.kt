@@ -9,6 +9,8 @@ import org.quaerense.users.domain.model.User
 
 class UserListAdapter : ListAdapter<User, UserViewHolder>(UserDiffCallback) {
 
+    var onUserClickListener: ((user: User) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val binding = ItemUserBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -23,5 +25,8 @@ class UserListAdapter : ListAdapter<User, UserViewHolder>(UserDiffCallback) {
         val user = getItem(position)
         Picasso.get().load(user.avatarUrl).into(holder.binding.ivAvatar)
         holder.binding.user = user
+        holder.binding.root.setOnClickListener {
+            onUserClickListener?.invoke(user)
+        }
     }
 }

@@ -15,9 +15,7 @@ class UserRepositoryImpl(private val application: Application) : UserRepository 
     private val dao = AppDatabase.getInstance(application).userDao()
     private val mapper = UserMapper()
 
-    override fun get(id: Int): LiveData<User> = Transformations.map(dao.get(id)) {
-        mapper.mapDbModelToEntity(it)
-    }
+    override suspend fun get(id: Int): User = mapper.mapDbModelToEntity(dao.get(id))
 
     override fun getAll(): LiveData<List<User>> = Transformations.map(dao.getAll()) {
         mapper.mapDbModelListToEntityList(it)

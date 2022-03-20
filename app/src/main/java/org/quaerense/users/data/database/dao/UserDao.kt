@@ -10,7 +10,7 @@ interface UserDao {
     suspend fun addAll(users: List<UserDbModel>)
 
     @Query("SELECT * FROM users WHERE id = :id")
-    fun get(id: Int): LiveData<UserDbModel>
+    suspend fun get(id: Int): UserDbModel
 
     @Query("SELECT * FROM users")
     fun getAll(): LiveData<List<UserDbModel>>

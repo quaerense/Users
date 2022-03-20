@@ -4,4 +4,6 @@
     <string name="label_first_name">First name</string>
     <string name="label_last_name">Last name</string>
     <string name="label_email">Email</string>
+    <string name="error_user_not_found">User not found</string>
+    <string name="users">Пользователи</string>
 </resources>

@@ -5,7 +5,7 @@ import org.quaerense.users.domain.model.User
 
 interface UserRepository {
 
-    fun get(id: Int): LiveData<User>
+    suspend fun get(id: Int): User
 
     fun getAll(): LiveData<List<User>>
 

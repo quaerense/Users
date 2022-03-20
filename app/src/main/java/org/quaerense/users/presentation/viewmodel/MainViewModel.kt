@@ -2,27 +2,25 @@ package org.quaerense.users.presentation.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.quaerense.users.data.repository.UserRepositoryImpl
 import org.quaerense.users.domain.model.User
-import org.quaerense.users.domain.usecase.*
+import org.quaerense.users.domain.usecase.DeleteUserUseCase
+import org.quaerense.users.domain.usecase.EditUserUseCase
+import org.quaerense.users.domain.usecase.GetUserListUseCase
+import org.quaerense.users.domain.usecase.LoadDataUseCase
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = UserRepositoryImpl(application)
 
-    val getUserUseCase = GetUserUseCase(repository)
     val getUserListUseCase = GetUserListUseCase(repository)
-    private val editUserUseCase = EditUserUseCase(repository)
     private val deleteUserUseCase = DeleteUserUseCase(repository)
     private val loadDataUseCase = LoadDataUseCase(repository)
 
-    private val scope = CoroutineScope(Dispatchers.Main)
-
     fun deleteUser(user: User) {
-        scope.launch {
+        viewModelScope.launch {
             deleteUserUseCase(user)
         }
     }

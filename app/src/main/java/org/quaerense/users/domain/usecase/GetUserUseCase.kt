@@ -6,7 +6,7 @@ import org.quaerense.users.domain.repository.UserRepository
 
 class GetUserUseCase(private val repository: UserRepository) {
 
-    operator fun invoke(id: Int): LiveData<User> {
+    suspend operator fun invoke(id: Int): User {
         return repository.get(id)
     }
 }
