@@ -8,8 +8,8 @@ import org.quaerense.users.databinding.ItemUserBinding
 import org.quaerense.users.domain.model.User
 
 class UserListAdapter : ListAdapter<User, UserViewHolder>(UserDiffCallback) {
-
     var onUserClickListener: ((user: User) -> Unit)? = null
+    var onUserLongClickListener: ((user: User) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val binding = ItemUserBinding.inflate(
@@ -27,6 +27,10 @@ class UserListAdapter : ListAdapter<User, UserViewHolder>(UserDiffCallback) {
         holder.binding.user = user
         holder.binding.root.setOnClickListener {
             onUserClickListener?.invoke(user)
+        }
+        holder.binding.root.setOnLongClickListener {
+            onUserLongClickListener?.invoke(user)
+            true
         }
     }
 }

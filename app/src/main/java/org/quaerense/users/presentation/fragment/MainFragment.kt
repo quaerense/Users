@@ -40,6 +40,9 @@ class MainFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         adapter.onUserClickListener = {
             launchUserInfoFragment(it.id)
         }
+        adapter.onUserLongClickListener = {
+            launchUserEditFragment(it.id)
+        }
         binding.rvUserList.adapter = adapter
         binding.srlRefreshUserList.setOnRefreshListener(this)
         setupSwipeListener()
@@ -81,6 +84,14 @@ class MainFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             .beginTransaction()
             .addToBackStack(null)
             .replace(R.id.main_container, UserInfoFragment.getInstance(userId))
+            .commit()
+    }
+
+    private fun launchUserEditFragment(userId: Int) {
+        requireActivity().supportFragmentManager
+            .beginTransaction()
+            .addToBackStack(null)
+            .replace(R.id.main_container, UserEditFragment.getInstance(userId))
             .commit()
     }
 

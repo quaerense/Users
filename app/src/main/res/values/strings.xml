@@ -7,4 +7,7 @@
     <string name="error_user_not_found">User not found</string>
     <string name="users">Users</string>
     <string name="description_edit_user_button">Edit user button</string>
+    <string name="hint_first_name">First name</string>
+    <string name="hint_last_name">Last name</string>
+    <string name="hint_email">Email</string>
 </resources>
