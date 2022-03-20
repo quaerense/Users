@@ -25,7 +25,7 @@ class UserRepositoryImpl(private val application: Application) : UserRepository 
 
     override suspend fun edit(user: User) = dao.edit(mapper.mapEntityToDbModel(user))
 
-    override suspend fun delete(id: Int) = dao.delete(id)
+    override suspend fun delete(user: User) = dao.delete(user.id)
 
     override fun loadData() {
         val workManager = WorkManager.getInstance(application)
