@@ -12,4 +12,6 @@ interface UserRepository {
     suspend fun edit(user: User)
 
     suspend fun delete(id: Int)
+
+    fun loadData()
 }

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Users</string>
+    <string name="description_user_avatar">User avatar</string>
+    <string name="label_first_name">First name</string>
+    <string name="label_last_name">Last name</string>
+    <string name="label_email">Email</string>
 </resources>

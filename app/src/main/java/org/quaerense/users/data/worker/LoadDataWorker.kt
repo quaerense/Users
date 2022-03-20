@@ -22,6 +22,7 @@ class LoadDataWorker(
         try {
             val userContainerDto = apiService.getUserList()
             val totalPages = userContainerDto.totalPages ?: 0
+            dao.deleteAll()
             dao.addAll(mapper.mapDtoListToEntityList(userContainerDto.users))
 
             for (page in 1..totalPages) {
