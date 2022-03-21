@@ -51,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:textColor="@color/black"
-                    android:textColorHint="@color/grey"
+                    android:textColorHint="@color/light_blue"
                     app:boxBackgroundColor="@color/white"
                     app:errorInputFirstName="@{viewModel.errorInputFirstName}"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -66,7 +66,7 @@
                         android:inputType="textCapWords"
                         android:text="@{viewModel.user.firstName}"
                         android:textColor="@color/black"
-                        android:textColorHint="@color/grey" />
+                        android:textColorHint="@color/light_blue" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -76,7 +76,7 @@
                     android:layout_marginTop="8dp"
                     android:hint="@string/label_last_name"
                     android:textColor="@color/black"
-                    android:textColorHint="@color/grey"
+                    android:textColorHint="@color/light_blue"
                     app:boxBackgroundColor="@color/white"
                     app:errorInputLastName="@{viewModel.errorInputLastName}"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -90,7 +90,7 @@
                         android:inputType="textCapWords"
                         android:text="@{viewModel.user.lastName}"
                         android:textColor="@color/black"
-                        android:textColorHint="@color/grey" />
+                        android:textColorHint="@color/light_blue" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -98,7 +98,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:textColorHint="@color/grey"
+                    android:textColorHint="@color/light_blue"
                     app:boxBackgroundColor="@color/white"
                     app:errorInputEmail="@{viewModel.errorInputEmail}"
                     app:hintTextColor="@color/black"
@@ -114,7 +114,7 @@
                         android:inputType="textEmailAddress"
                         android:text="@{viewModel.user.email}"
                         android:textColor="@color/black"
-                        android:textColorHint="@color/grey" />
+                        android:textColorHint="@color/light_blue" />
                 </com.google.android.material.textfield.TextInputLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

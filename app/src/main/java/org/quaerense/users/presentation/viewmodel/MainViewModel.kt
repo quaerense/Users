@@ -1,5 +1,6 @@
 package org.quaerense.users.presentation.viewmodel
 
+import android.app.Activity
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,7 +8,6 @@ import kotlinx.coroutines.launch
 import org.quaerense.users.data.repository.UserRepositoryImpl
 import org.quaerense.users.domain.model.User
 import org.quaerense.users.domain.usecase.DeleteUserUseCase
-import org.quaerense.users.domain.usecase.EditUserUseCase
 import org.quaerense.users.domain.usecase.GetUserListUseCase
 import org.quaerense.users.domain.usecase.LoadDataUseCase
 
@@ -29,7 +29,27 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         loadDataUseCase()
     }
 
+    private fun loadDataIfFirstAppLaunch() {
+        val preferences = getApplication<Application>().getSharedPreferences(
+            APP_PREFERENCES,
+            Activity.MODE_PRIVATE
+        )
+        val isFirstLaunch = preferences.getBoolean(FIRST_LAUNCH, true)
+        if (isFirstLaunch) {
+            val editor = preferences.edit()
+            editor.putBoolean(FIRST_LAUNCH, false)
+            editor.apply()
+            loadData()
+        }
+    }
+
     init {
-        loadData()
+        loadDataIfFirstAppLaunch()
+    }
+
+    companion object {
+
+        private const val APP_PREFERENCES = "preferences"
+        private const val FIRST_LAUNCH = "first launch"
     }
 }
