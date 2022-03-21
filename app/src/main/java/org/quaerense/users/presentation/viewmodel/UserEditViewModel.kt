@@ -1,6 +1,7 @@
 package org.quaerense.users.presentation.viewmodel
 
 import android.app.Application
+import android.net.Uri
 import android.util.Patterns
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -19,6 +20,10 @@ class UserEditViewModel(application: Application) : AndroidViewModel(application
     private val editUserUseCase = EditUserUseCase(repository)
     private val getUserUseCase = GetUserUseCase(repository)
 
+    private val _user = MutableLiveData<User>()
+    val user: LiveData<User>
+        get() = _user
+
     private val _errorInputFirstName = MutableLiveData<Boolean>()
     val errorInputFirstName: LiveData<Boolean>
         get() = _errorInputFirstName
@@ -31,10 +36,6 @@ class UserEditViewModel(application: Application) : AndroidViewModel(application
     val errorInputEmail: LiveData<Boolean>
         get() = _errorInputEmail
 
-    private val _user = MutableLiveData<User>()
-    val user: LiveData<User>
-        get() = _user
-
     private val _shouldCloseScreen = MutableLiveData<Unit>()
     val shouldCloseScreen: LiveData<Unit>
         get() = _shouldCloseScreen
@@ -46,15 +47,25 @@ class UserEditViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    fun editUser(inputFirstName: String?, inputLastName: String?, inputEmail: String?) {
+    fun editUser(
+        inputFirstName: String?,
+        inputLastName: String?,
+        inputEmail: String?,
+        inputImageUri: Uri?
+    ) {
         val firstName = parseInput(inputFirstName)
         val lastName = parseInput(inputLastName)
         val email = parseInput(inputEmail)
         val fieldsValid = validateInput(firstName, lastName, email)
+        val avatarUrl = parseInputImageUri(inputImageUri)
+        val avatarUrlIsValid = validateImageUrl(avatarUrl)
         if (fieldsValid) {
             _user.value?.let {
                 viewModelScope.launch {
                     val user = it.copy(firstName = firstName, lastName = lastName, email = email)
+                    if (avatarUrlIsValid) {
+                        user.avatarUrl = avatarUrl
+                    }
                     editUserUseCase(user)
                     finishWork()
                 }
@@ -64,6 +75,10 @@ class UserEditViewModel(application: Application) : AndroidViewModel(application
 
     private fun parseInput(input: String?): String {
         return input?.trim() ?: ""
+    }
+
+    private fun parseInputImageUri(input: Uri?): String {
+        return input.toString()
     }
 
     private fun validateInput(firstName: String, lastName: String, email: String): Boolean {
@@ -83,6 +98,12 @@ class UserEditViewModel(application: Application) : AndroidViewModel(application
         }
 
         return result
+    }
+
+    private fun validateImageUrl(imageUrl: String): Boolean {
+        if (imageUrl == "null" || imageUrl.isBlank()) return false
+
+        return true
     }
 
     fun resetErrorInputFirstName() {

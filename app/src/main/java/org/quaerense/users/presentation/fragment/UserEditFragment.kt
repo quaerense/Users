@@ -1,5 +1,8 @@
 package org.quaerense.users.presentation.fragment
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,12 +10,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.squareup.picasso.Picasso
 import org.quaerense.users.R
 import org.quaerense.users.databinding.FragmentUserEditBinding
-import org.quaerense.users.domain.model.User
 import org.quaerense.users.presentation.viewmodel.UserEditViewModel
 
 class UserEditFragment : Fragment() {
@@ -22,6 +26,10 @@ class UserEditFragment : Fragment() {
         get() = _binding ?: throw RuntimeException("FragmentUserEditBinding is null")
 
     private var userId = UNDEFINED_ID
+
+    private var imageUri: Uri? = null
+
+    private lateinit var photoResultLauncher: ActivityResultLauncher<Intent>
 
     private val viewModel by lazy {
         ViewModelProvider(this)[UserEditViewModel::class.java]
@@ -43,14 +51,10 @@ class UserEditFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        registerActivityResult()
         observeViewModel()
         addTextChangeListeners()
-        binding.fabSaveUser.setOnClickListener {
-            val firstName = binding.etFirstName.text.toString()
-            val lastName = binding.etLastName.text.toString()
-            val email = binding.etEmail.text.toString()
-            viewModel.editUser(firstName, lastName, email)
-        }
+        setOnClickListeners()
     }
 
     override fun onDestroyView() {
@@ -67,6 +71,15 @@ class UserEditFragment : Fragment() {
                 Toast.LENGTH_SHORT
             ).show()
             requireActivity().onBackPressed()
+        }
+    }
+
+    private fun setOnClickListeners() {
+        binding.fabChangeAvatar.setOnClickListener {
+            createIntentForActivityResult()
+        }
+        binding.fabSaveUser.setOnClickListener {
+            editUser()
         }
     }
 
@@ -112,8 +125,31 @@ class UserEditFragment : Fragment() {
         })
     }
 
-    private fun editUser(user: User) {
+    private fun registerActivityResult() {
+        photoResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val intent = result.data
+                    imageUri = intent?.data
+                    Picasso.get()
+                        .load(imageUri)
+                        .error(R.drawable.ic_user_icon)
+                        .into(binding.ivAvatar)
+                }
+            }
+    }
 
+    private fun createIntentForActivityResult() {
+        val photoPickerIntent = Intent(Intent.ACTION_PICK)
+        photoPickerIntent.type = "image/*"
+        photoResultLauncher.launch(photoPickerIntent)
+    }
+
+    private fun editUser() {
+        val firstName = binding.etFirstName.text.toString()
+        val lastName = binding.etLastName.text.toString()
+        val email = binding.etEmail.text.toString()
+        viewModel.editUser(firstName, lastName, email, imageUri)
     }
 
     companion object {

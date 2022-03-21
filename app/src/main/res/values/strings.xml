@@ -10,4 +10,6 @@
     <string name="error_input_first_name">Invalid first name</string>
     <string name="error_input_last_name">Invalid last name</string>
     <string name="error_input_email">Invalid email</string>
+    <string name="description_change_avatar_button">Change avatar button</string>
+    <string name="error_input_image">Error loading image. Please try again.</string>
 </resources>

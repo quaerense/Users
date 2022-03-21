@@ -10,4 +10,6 @@
     <string name="error_input_first_name">Некорректное имя</string>
     <string name="error_input_last_name">Некорректая фамилия</string>
     <string name="error_input_email">Некорректный email</string>
+    <string name="description_change_avatar_button">Кнопка изменения аватара</string>
+    <string name="error_input_image">Ошибка при загрузке изображения. Попробуйте снова.</string>
 </resources>
