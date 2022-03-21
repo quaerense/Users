@@ -21,11 +21,11 @@ class LoadDataWorker(
     override suspend fun doWork(): Result {
         try {
             val userContainerDto = apiService.getUserList()
-            val totalPages = userContainerDto.totalPages ?: 0
+            val totalPages = userContainerDto.totalPages ?: 1
             dao.deleteAll()
             dao.addAll(mapper.mapDtoListToEntityList(userContainerDto.users))
 
-            for (page in 1..totalPages) {
+            for (page in 2..totalPages) {
                 val userListDto = apiService.getUserList(page).users
                 dao.addAll(mapper.mapDtoListToEntityList(userListDto))
             }
