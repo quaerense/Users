@@ -1,7 +1,10 @@
 package org.quaerense.users.presentation.fragment
 
+import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -12,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.squareup.picasso.Picasso
@@ -30,9 +34,15 @@ class UserEditFragment : Fragment() {
     private var imageUri: Uri? = null
 
     private lateinit var photoResultLauncher: ActivityResultLauncher<Intent>
+    private lateinit var pLauncher: ActivityResultLauncher<String>
 
     private val viewModel by lazy {
         ViewModelProvider(this)[UserEditViewModel::class.java]
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        registerPermissionListener()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,7 +86,7 @@ class UserEditFragment : Fragment() {
 
     private fun setOnClickListeners() {
         binding.fabChangeAvatar.setOnClickListener {
-            createIntentForActivityResult()
+            checkReadExternalStoragePermission()
         }
         binding.fabSaveUser.setOnClickListener {
             editUser()
@@ -139,10 +149,32 @@ class UserEditFragment : Fragment() {
             }
     }
 
+    private fun checkReadExternalStoragePermission() {
+        when (PackageManager.PERMISSION_GRANTED) {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) -> createIntentForActivityResult()
+            else -> pLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+    }
+
     private fun createIntentForActivityResult() {
         val photoPickerIntent = Intent(Intent.ACTION_PICK)
         photoPickerIntent.type = "image/*"
         photoResultLauncher.launch(photoPickerIntent)
+    }
+
+    private fun registerPermissionListener() {
+        pLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (!it) {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.warning_external_storage_permission),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
     }
 
     private fun editUser() {

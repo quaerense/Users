@@ -56,8 +56,8 @@ class UserEditViewModel(application: Application) : AndroidViewModel(application
         val firstName = parseInput(inputFirstName)
         val lastName = parseInput(inputLastName)
         val email = parseInput(inputEmail)
-        val fieldsValid = validateInput(firstName, lastName, email)
         val avatarUrl = parseInputImageUri(inputImageUri)
+        val fieldsValid = validateInput(firstName, lastName, email)
         val avatarUrlIsValid = validateImageUrl(avatarUrl)
         if (fieldsValid) {
             _user.value?.let {

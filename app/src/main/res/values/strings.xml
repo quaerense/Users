@@ -12,4 +12,5 @@
     <string name="error_input_email">Invalid email</string>
     <string name="description_change_avatar_button">Change avatar button</string>
     <string name="error_input_image">Error loading image. Please try again.</string>
+    <string name="warning_external_storage_permission">In order for the photos you uploaded to be displayed here, you need to give permission to read media files in settings.</string>
 </resources>

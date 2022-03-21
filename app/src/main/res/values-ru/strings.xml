@@ -12,4 +12,5 @@
     <string name="error_input_email">Некорректный email</string>
     <string name="description_change_avatar_button">Кнопка изменения аватара</string>
     <string name="error_input_image">Ошибка при загрузке изображения. Попробуйте снова.</string>
+    <string name="warning_external_storage_permission">Чтобы загруженные вами фотографии отображались здесь, нужно дать разрешение на считывание медиафайлов в настройках.</string>
 </resources>
