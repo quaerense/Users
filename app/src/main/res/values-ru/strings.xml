@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Пользователи</string>
+    <string name="description_user_avatar">Аватар пользователя</string>
+    <string name="label_first_name">Имя</string>
+    <string name="label_last_name">Фамилия</string>
+    <string name="error_user_not_found">Пользователь не найден</string>
+    <string name="users">Пользователи</string>
+    <string name="description_edit_user_button">Кнопка редактирования пользователя</string>
+    <string name="error_input_first_name">Некорректное имя</string>
+    <string name="error_input_last_name">Некорректая фамилия</string>
+    <string name="error_input_email">Некорректный email</string>
+</resources>
