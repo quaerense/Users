@@ -1,6 +1,8 @@
 package org.quaerense.users.presentation.fragment
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +12,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.squareup.picasso.Picasso
 import org.quaerense.users.R
 import org.quaerense.users.databinding.FragmentUserEditBinding
-import org.quaerense.users.databinding.FragmentUserInfoBinding
-import org.quaerense.users.presentation.viewmodel.UserInfoViewModel
+import org.quaerense.users.domain.model.User
+import org.quaerense.users.presentation.viewmodel.UserEditViewModel
 
 class UserEditFragment : Fragment() {
 
@@ -22,7 +24,12 @@ class UserEditFragment : Fragment() {
     private var userId = UNDEFINED_ID
 
     private val viewModel by lazy {
-        ViewModelProvider(this)[UserInfoViewModel::class.java]
+        ViewModelProvider(this)[UserEditViewModel::class.java]
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        parseParams()
     }
 
     override fun onCreateView(
@@ -36,12 +43,14 @@ class UserEditFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        parseParams()
-        viewModel.user.observe(viewLifecycleOwner) {
-            Picasso.get().load(it.avatarUrl).into(binding.ivAvatar)
-            binding.user = it
+        observeViewModel()
+        addTextChangeListeners()
+        binding.fabSaveUser.setOnClickListener {
+            val firstName = binding.etFirstName.text.toString()
+            val lastName = binding.etLastName.text.toString()
+            val email = binding.etEmail.text.toString()
+            viewModel.editUser(firstName, lastName, email)
         }
-        viewModel.getUser(userId)
     }
 
     override fun onDestroyView() {
@@ -59,6 +68,52 @@ class UserEditFragment : Fragment() {
             ).show()
             requireActivity().onBackPressed()
         }
+    }
+
+    private fun observeViewModel() {
+        viewModel.getUser(userId)
+        viewModel.user.observe(viewLifecycleOwner) {
+            Picasso.get().load(it.avatarUrl)
+                .placeholder(R.drawable.ic_user_icon)
+                .error(R.drawable.ic_user_icon)
+                .into(binding.ivAvatar)
+        }
+        viewModel.shouldCloseScreen.observe(viewLifecycleOwner) {
+            requireActivity().onBackPressed()
+        }
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+    }
+
+    private fun addTextChangeListeners() {
+        binding.etFirstName.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) =
+                viewModel.resetErrorInputFirstName()
+
+            override fun afterTextChanged(p0: Editable?) {}
+        })
+        binding.etLastName.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) =
+                viewModel.resetErrorInputLastName()
+
+            override fun afterTextChanged(p0: Editable?) {}
+        })
+        binding.etEmail.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) =
+                viewModel.resetErrorInputEmail()
+
+            override fun afterTextChanged(p0: Editable?) {}
+        })
+    }
+
+    private fun editUser(user: User) {
+
     }
 
     companion object {

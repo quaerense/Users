@@ -38,9 +38,6 @@ class MainFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         super.onViewCreated(view, savedInstanceState)
         adapter = UserListAdapter()
         adapter.onUserClickListener = {
-            launchUserInfoFragment(it.id)
-        }
-        adapter.onUserLongClickListener = {
             launchUserEditFragment(it.id)
         }
         binding.rvUserList.adapter = adapter
@@ -77,14 +74,6 @@ class MainFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         val itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper.attachToRecyclerView(binding.rvUserList)
-    }
-
-    private fun launchUserInfoFragment(userId: Int) {
-        requireActivity().supportFragmentManager
-            .beginTransaction()
-            .addToBackStack(null)
-            .replace(R.id.main_container, UserInfoFragment.getInstance(userId))
-            .commit()
     }
 
     private fun launchUserEditFragment(userId: Int) {
