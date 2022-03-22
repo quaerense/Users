@@ -1,22 +1,19 @@
 package org.quaerense.users.data.worker
 
 import android.content.Context
-import androidx.work.CoroutineWorker
-import androidx.work.OneTimeWorkRequest
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkerParameters
-import org.quaerense.users.data.database.AppDatabase
+import androidx.work.*
+import org.quaerense.users.data.database.dao.UserDao
 import org.quaerense.users.data.mapper.UserMapper
-import org.quaerense.users.data.network.ApiFactory
+import org.quaerense.users.data.network.ApiService
+import javax.inject.Inject
 
-class LoadDataWorker(
+class LoadDataWorker @Inject constructor(
     context: Context,
-    params: WorkerParameters
+    params: WorkerParameters,
+    private val apiService: ApiService,
+    private val dao: UserDao,
+    private val mapper: UserMapper
 ) : CoroutineWorker(context, params) {
-
-    private val apiService = ApiFactory.apiService
-    private val dao = AppDatabase.getInstance(context).userDao()
-    private val mapper = UserMapper()
 
     override suspend fun doWork(): Result {
         try {
@@ -42,7 +39,15 @@ class LoadDataWorker(
         const val NAME = "LoadDataWorker"
 
         fun makeRequest(): OneTimeWorkRequest {
-            return OneTimeWorkRequestBuilder<LoadDataWorker>().build()
+            return OneTimeWorkRequestBuilder<LoadDataWorker>()
+                .setConstraints(makeConstraints())
+                .build()
+        }
+
+        private fun makeConstraints(): Constraints {
+            return Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build()
         }
     }
 
