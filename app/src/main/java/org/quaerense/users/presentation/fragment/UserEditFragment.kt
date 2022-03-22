@@ -21,26 +21,35 @@ import androidx.lifecycle.ViewModelProvider
 import com.squareup.picasso.Picasso
 import org.quaerense.users.R
 import org.quaerense.users.databinding.FragmentUserEditBinding
+import org.quaerense.users.presentation.UsersApp
 import org.quaerense.users.presentation.viewmodel.UserEditViewModel
+import org.quaerense.users.presentation.viewmodel.ViewModelFactory
+import javax.inject.Inject
 
 class UserEditFragment : Fragment() {
-
     private var _binding: FragmentUserEditBinding? = null
     private val binding: FragmentUserEditBinding
         get() = _binding ?: throw RuntimeException("FragmentUserEditBinding is null")
 
-    private var userId = UNDEFINED_ID
-
-    private var imageUri: Uri? = null
-
     private lateinit var photoResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var pLauncher: ActivityResultLauncher<String>
 
+    private var userId = UNDEFINED_ID
+    private var imageUri: Uri? = null
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val component by lazy {
+        (requireActivity().application as UsersApp).component
+    }
+
     private val viewModel by lazy {
-        ViewModelProvider(this)[UserEditViewModel::class.java]
+        ViewModelProvider(this, viewModelFactory)[UserEditViewModel::class.java]
     }
 
     override fun onAttach(context: Context) {
+        component.inject(this)
         super.onAttach(context)
         registerPermissionListener()
     }

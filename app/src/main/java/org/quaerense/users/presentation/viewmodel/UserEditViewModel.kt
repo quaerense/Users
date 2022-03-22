@@ -8,18 +8,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import org.quaerense.users.data.repository.UserRepositoryImpl
 import org.quaerense.users.domain.model.User
 import org.quaerense.users.domain.usecase.EditUserUseCase
 import org.quaerense.users.domain.usecase.GetUserUseCase
+import javax.inject.Inject
 
-class UserEditViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val repository = UserRepositoryImpl(application)
-
-    private val editUserUseCase = EditUserUseCase(repository)
-    private val getUserUseCase = GetUserUseCase(repository)
-
+class UserEditViewModel @Inject constructor(
+    application: Application,
+    private val editUserUseCase: EditUserUseCase,
+    private val getUserUseCase: GetUserUseCase
+) : AndroidViewModel(application) {
     private val _user = MutableLiveData<User>()
     val user: LiveData<User>
         get() = _user

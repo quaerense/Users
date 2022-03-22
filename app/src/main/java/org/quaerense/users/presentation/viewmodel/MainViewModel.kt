@@ -5,19 +5,20 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import org.quaerense.users.data.repository.UserRepositoryImpl
 import org.quaerense.users.domain.model.User
 import org.quaerense.users.domain.usecase.DeleteUserUseCase
 import org.quaerense.users.domain.usecase.GetUserListUseCase
 import org.quaerense.users.domain.usecase.LoadDataUseCase
+import javax.inject.Inject
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+class MainViewModel @Inject constructor(
+    application: Application,
+    getUserListUseCase: GetUserListUseCase,
+    private val deleteUserUseCase: DeleteUserUseCase,
+    private val loadDataUseCase: LoadDataUseCase
+) : AndroidViewModel(application) {
 
-    private val repository = UserRepositoryImpl(application)
-
-    val getUserListUseCase = GetUserListUseCase(repository)
-    private val deleteUserUseCase = DeleteUserUseCase(repository)
-    private val loadDataUseCase = LoadDataUseCase(repository)
+    val userList = getUserListUseCase()
 
     fun deleteUser(user: User) {
         viewModelScope.launch {

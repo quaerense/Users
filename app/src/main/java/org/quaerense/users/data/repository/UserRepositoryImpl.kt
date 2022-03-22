@@ -5,15 +5,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.work.ExistingWorkPolicy
 import androidx.work.WorkManager
-import org.quaerense.users.data.database.AppDatabase
+import org.quaerense.users.data.database.dao.UserDao
 import org.quaerense.users.data.mapper.UserMapper
 import org.quaerense.users.data.worker.LoadDataWorker
 import org.quaerense.users.domain.model.User
 import org.quaerense.users.domain.repository.UserRepository
+import javax.inject.Inject
 
-class UserRepositoryImpl(private val application: Application) : UserRepository {
-    private val dao = AppDatabase.getInstance(application).userDao()
-    private val mapper = UserMapper()
+class UserRepositoryImpl @Inject constructor(
+    private val application: Application,
+    private val dao: UserDao,
+    private val mapper: UserMapper
+) : UserRepository {
 
     override suspend fun get(id: Int): User = mapper.mapDbModelToEntity(dao.get(id))
 

@@ -1,5 +1,6 @@
 package org.quaerense.users.presentation.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,18 +12,33 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import org.quaerense.users.R
 import org.quaerense.users.databinding.FragmentMainBinding
+import org.quaerense.users.presentation.UsersApp
 import org.quaerense.users.presentation.adapter.UserListAdapter
 import org.quaerense.users.presentation.viewmodel.MainViewModel
+import org.quaerense.users.presentation.viewmodel.ViewModelFactory
+import javax.inject.Inject
 
 class MainFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
-
     private var _binding: FragmentMainBinding? = null
     private val binding: FragmentMainBinding
         get() = _binding ?: throw RuntimeException("FragmentMainBinding is null")
 
     private lateinit var adapter: UserListAdapter
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
     val viewModel by lazy {
-        ViewModelProvider(this)[MainViewModel::class.java]
+        ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
+    }
+
+    private val component by lazy {
+        (requireActivity().application as UsersApp).component
+    }
+
+    override fun onAttach(context: Context) {
+        component.inject(this)
+        super.onAttach(context)
     }
 
     override fun onCreateView(
@@ -43,7 +59,7 @@ class MainFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         binding.rvUserList.adapter = adapter
         binding.srlRefreshUserList.setOnRefreshListener(this)
         setupSwipeListener()
-        viewModel.getUserListUseCase().observe(viewLifecycleOwner) {
+        viewModel.userList.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
     }

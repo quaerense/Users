@@ -3,8 +3,9 @@ package org.quaerense.users.data.mapper
 import org.quaerense.users.data.database.model.UserDbModel
 import org.quaerense.users.data.network.model.UserDto
 import org.quaerense.users.domain.model.User
+import javax.inject.Inject
 
-class UserMapper {
+class UserMapper @Inject constructor() {
 
     fun mapDtoListToEntityList(dtoList: List<UserDto>?) =
         dtoList?.map {
